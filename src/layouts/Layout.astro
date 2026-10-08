@@ -1,0 +1,237 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  keywords?: string;
+  ogType?: 'website' | 'article';
+  publishDate?: string;
+  updateDate?: string;
+  jsonLd?: Record<string, any>;
+  currentPath?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalUrl = siteConfig.siteUrl + (Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/'),
+  keywords = siteConfig.keywords,
+  ogType = 'website',
+  publishDate,
+  updateDate,
+  jsonLd,
+  currentPath = Astro.url.pathname
+} = Astro.props;
+
+const siteTitle = title.includes(siteConfig.name) ? title : `${title} - ${siteConfig.name}`;
+
+// Default WebSite JSON-LD
+const defaultJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  'name': siteConfig.name,
+  'alternateName': siteConfig.shortTitle,
+  'url': siteConfig.siteUrl,
+  'description': siteConfig.description,
+  'inLanguage': 'zh-CN'
+};
+
+const finalJsonLd = jsonLd || defaultJsonLd;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="zh_CN" />
+    {publishDate && <meta property="article:published_time" content={publishDate} />}
+    {updateDate && <meta property="article:modified_time" content={updateDate} />}
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(finalJsonLd)}></script>
+  </head>
+  <body>
+    <div class="site-wrapper">
+      <Header currentPath={currentPath} />
+      <main class="main-content">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-bg-base: #f8fafc;
+    --color-bg-surface: #ffffff;
+    --color-bg-card: #ffffff;
+    --color-primary: #ea580c;
+    --color-primary-hover: #c2410c;
+    --color-primary-light: #f97316;
+    --color-text-main: #0f172a;
+    --color-text-body: #334155;
+    --color-text-muted: #64748b;
+    --color-border: #e2e8f0;
+    --color-border-hover: #f97316;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .site-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .main-content {
+    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Typography utilities */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-main);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Container utility */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  /* Section utility */
+  .section {
+    padding: 4.5rem 0;
+    position: relative;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 3rem auto;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    padding: 0.25rem 0.85rem;
+    border-radius: 9999px;
+    margin-bottom: 0.85rem;
+  }
+
+  .section-title {
+    font-size: 2.15rem;
+    margin: 0 0 0.85rem 0;
+    color: var(--color-text-main);
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 3rem 0;
+    }
+    .section-title {
+      font-size: 1.65rem;
+    }
+    .section-subtitle {
+      font-size: 0.95rem;
+    }
+  }
+</style>

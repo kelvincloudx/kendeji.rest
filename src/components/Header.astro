@@ -1,0 +1,361 @@
+---
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="header-container">
+    <!-- Brand LOGO (Left) -->
+    <a href="/" class="brand-logo" aria-label="肯の基机场首页">
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="10" fill="url(#logo-grad)" />
+          <path d="M10 20L28 12L22 28L19 22L10 20Z" fill="#FFFFFF" />
+          <path d="M19 22L28 12" stroke="#FFD8A8" stroke-width="1.5" stroke-linecap="round" />
+          <circle cx="28" cy="12" r="2.5" fill="#FFA94D" />
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FF6B35" />
+              <stop offset="1" stop-color="#E8590C" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">肯の基机场</span>
+        <span class="brand-badge">指南</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation (Center/Horizontal) -->
+    <nav class="desktop-nav" aria-label="主要导航">
+      <ul class="nav-list">
+        <li><a href="/" class={currentPath === '/' ? 'nav-link active' : 'nav-link'}>首页</a></li>
+        <li><a href="/#pricing" class="nav-link">套餐价格</a></li>
+        <li><a href="/#guide" class="nav-link">使用教程</a></li>
+        <li><a href="/#articles" class="nav-link">知识文章</a></li>
+        <li><a href="/#faq" class="nav-link">常见问题</a></li>
+      </ul>
+    </nav>
+
+    <!-- Header Actions (Right) -->
+    <div class="header-actions">
+      <a
+        href={siteConfig.affiliateUrl}
+        target="_blank"
+        rel={siteConfig.affiliateRel}
+        class="btn-cta header-cta"
+      >
+        <span>立即注册</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button
+        type="button"
+        class="mobile-menu-btn"
+        id="mobileMenuToggle"
+        aria-label="切换移动端导航菜单"
+        aria-expanded="false"
+        aria-controls="mobileNavMenu"
+      >
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Nav (Hidden by default, only shown on mobile when toggled) -->
+  <div class="mobile-nav" id="mobileNavMenu" aria-hidden="true">
+    <nav aria-label="移动端导航">
+      <ul class="mobile-nav-list">
+        <li><a href="/" class="mobile-nav-link">首页</a></li>
+        <li><a href="/#pricing" class="mobile-nav-link">套餐价格</a></li>
+        <li><a href="/#guide" class="mobile-nav-link">使用教程</a></li>
+        <li><a href="/#articles" class="mobile-nav-link">知识文章</a></li>
+        <li><a href="/#faq" class="mobile-nav-link">常见问题</a></li>
+      </ul>
+      <div class="mobile-nav-cta">
+        <a
+          href={siteConfig.affiliateUrl}
+          target="_blank"
+          rel={siteConfig.affiliateRel}
+          class="btn-cta mobile-cta-btn"
+        >
+          前往注册账户
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggleBtn = document.getElementById('mobileMenuToggle');
+  const mobileNav = document.getElementById('mobileNavMenu');
+
+  if (toggleBtn && mobileNav) {
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
+      toggleBtn.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+      mobileNav.setAttribute('aria-hidden', String(isExpanded));
+    });
+
+    // Close menu when clicking any mobile nav link
+    const mobileLinks = mobileNav.querySelectorAll('.mobile-nav-link, .mobile-cta-btn');
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.classList.remove('active');
+        mobileNav.classList.remove('open');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      });
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #0f172a;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .brand-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    white-space: nowrap;
+  }
+
+  .brand-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    background: #fff7ed;
+    color: #ea580c;
+    border: 1px solid #fed7aa;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Desktop Navigation */
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    padding: 0.35rem 0;
+    position: relative;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: #ea580c;
+  }
+
+  .nav-link.active {
+    color: #ea580c;
+    font-weight: 600;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Warm Orange Button */
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .btn-cta:hover,
+  .btn-cta:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+    opacity: 0.96;
+  }
+
+  .btn-cta:active {
+    transform: translateY(0);
+  }
+
+  /* Mobile Hamburger Button */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    z-index: 101;
+  }
+
+  .hamburger-bar {
+    width: 100%;
+    height: 2.5px;
+    background-color: #334155;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .mobile-menu-btn.active .hamburger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .mobile-menu-btn.active .hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active .hamburger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile Nav Dropdown - Strictly hidden on desktop */
+  .mobile-nav {
+    display: none !important;
+    background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    color: #334155;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 500;
+    padding: 0.6rem 0.25rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:focus-visible {
+    color: #ea580c;
+  }
+
+  .mobile-nav-cta {
+    margin-top: 1.25rem;
+  }
+
+  .mobile-cta-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  /* Responsive Rules: Breakpoint at 860px */
+  @media (max-width: 860px) {
+    .desktop-nav {
+      display: none !important;
+    }
+    .mobile-menu-btn {
+      display: flex !important;
+    }
+    .header-cta {
+      display: none !important;
+    }
+    /* On mobile screens, only show when .open is toggled */
+    .mobile-nav.open {
+      display: block !important;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .mobile-nav {
+      display: none !important;
+    }
+    .mobile-menu-btn {
+      display: none !important;
+    }
+  }
+</style>

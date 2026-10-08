@@ -1,0 +1,656 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { articles } from '../../data/articles';
+import { siteConfig } from '../../data/siteConfig';
+
+export async function getStaticPaths() {
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article }
+  }));
+}
+
+const { article } = Astro.props;
+
+const canonicalUrl = `${siteConfig.siteUrl}/articles/${article.slug}/`;
+const pageTitle = `${article.title} - ${siteConfig.name}`;
+
+// BreadcrumbList JSON-LD
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': '首页',
+      'item': siteConfig.siteUrl
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': '知识文章',
+      'item': `${siteConfig.siteUrl}/#articles`
+    },
+    {
+      '@type': 'ListItem',
+      'position': 3,
+      'name': article.title,
+      'item': canonicalUrl
+    }
+  ]
+};
+
+// Article JSON-LD
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  'headline': article.title,
+  'description': article.description,
+  'datePublished': article.publishDate,
+  'dateModified': article.updateDate,
+  'mainEntityOfPage': {
+    '@type': 'WebPage',
+    '@id': canonicalUrl
+  },
+  'author': {
+    '@type': 'Organization',
+    'name': siteConfig.name,
+    'url': siteConfig.siteUrl
+  },
+  'publisher': {
+    '@type': 'Organization',
+    'name': siteConfig.name,
+    'url': siteConfig.siteUrl
+  },
+  'inLanguage': 'zh-CN'
+};
+
+const combinedJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [breadcrumbJsonLd, articleJsonLd]
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={article.description}
+  canonicalUrl={canonicalUrl}
+  keywords={article.keywords}
+  ogType="article"
+  publishDate={article.publishDate}
+  updateDate={article.updateDate}
+  jsonLd={combinedJsonLd}
+>
+  <div class="article-page-wrapper">
+    <!-- Breadcrumb -->
+    <div class="container breadcrumb-container">
+      <nav class="breadcrumb-nav" aria-label="面包屑导航">
+        <ol class="breadcrumb-list">
+          <li><a href="/">首页</a></li>
+          <li class="separator">/</li>
+          <li><a href="/#articles">知识文章</a></li>
+          <li class="separator">/</li>
+          <li aria-current="page" class="current">{article.title}</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Article Header -->
+    <header class="article-header-section">
+      <div class="container article-header-container">
+        <div class="article-tag">网络节点与出海科普</div>
+        <h1 class="article-h1">{article.title}</h1>
+
+        <div class="article-meta-bar">
+          <div class="meta-item">
+            <span class="meta-label">发布日期：</span>
+            <time datetime={article.publishDate}>{article.publishDate}</time>
+          </div>
+          <span class="meta-dot">·</span>
+          <div class="meta-item">
+            <span class="meta-label">更新日期：</span>
+            <time datetime={article.updateDate}>{article.updateDate}</time>
+          </div>
+          <span class="meta-dot">·</span>
+          <div class="meta-item">
+            <span class="meta-label">阅读时间：</span>
+            <span>{article.readTime}</span>
+          </div>
+        </div>
+
+        <div class="article-lead-box">
+          <strong>导读摘要：</strong>
+          <p>{article.summary}</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="container article-content-layout">
+      <article class="article-main-body">
+        <div class="prose-content" set:html={article.contentHtml} />
+
+        <!-- Internal Links Section -->
+        {article.relatedLinks && article.relatedLinks.length > 0 && (
+          <div class="related-articles-box">
+            <h3 class="related-heading">相关推荐阅读</h3>
+            <ul class="related-list">
+              {article.relatedLinks.map((link) => (
+                <li>
+                  <a href={link.url} class="related-link">
+                    <span class="bullet">→</span>
+                    <span>{link.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <!-- Bottom CTA Box -->
+        <div class="article-cta-box">
+          <div class="cta-inner">
+            <h3 class="cta-title">准备好开启顺畅出海连接体验了吗？</h3>
+            <p class="cta-text">
+              肯の基机场提供 100GB 至 1TB 多档月付流量套餐，全系支持每月自动重置与独立 Token 鉴权。
+            </p>
+            <div class="cta-actions">
+              <a href="/#pricing" class="btn-cta-secondary">返回查看套餐</a>
+              <a
+                href={siteConfig.affiliateUrl}
+                target="_blank"
+                rel={siteConfig.affiliateRel}
+                class="btn-cta-primary"
+              >
+                前往注册账户
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back to Home navigation -->
+        <div class="article-nav-bottom">
+          <a href="/" class="btn-back-home">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>返回肯の基机场首页</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- Sidebar Area -->
+      <aside class="article-sidebar">
+        <div class="sidebar-widget package-widget">
+          <h4 class="widget-title">肯の基机场套餐一览</h4>
+          <p class="widget-desc">支持全平台客户端导入，单月起付无捆绑：</p>
+          <ul class="widget-pkg-list">
+            <li>
+              <span class="w-pkg-name">经典OK单人餐</span>
+              <span class="w-pkg-price">¥30/月 (100GB)</span>
+            </li>
+            <li>
+              <span class="w-pkg-name">七虾堡双人餐</span>
+              <span class="w-pkg-price">¥60/月 (200GB)</span>
+            </li>
+            <li>
+              <span class="w-pkg-name">大神卡流量堡</span>
+              <span class="w-pkg-price">¥90/月 (300GB)</span>
+            </li>
+            <li>
+              <span class="w-pkg-name">全家桶套餐</span>
+              <span class="w-pkg-price">¥150/月 (500GB)</span>
+            </li>
+          </ul>
+          <a
+            href={siteConfig.affiliateUrl}
+            target="_blank"
+            rel={siteConfig.affiliateRel}
+            class="btn-widget-cta"
+          >
+            前往注册选购
+          </a>
+        </div>
+
+        <div class="sidebar-widget help-widget">
+          <h4 class="widget-title">使用提示</h4>
+          <p class="help-desc">
+            若在使用中遇到连接异常，请优先检查本机网络时间同步及客户端内核版本。如需官方协助，请直接登录后台提交工单。
+          </p>
+          <a href="/#faq" class="widget-text-link">查看常见问题答疑 →</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .article-page-wrapper {
+    padding-bottom: 5rem;
+  }
+
+  .breadcrumb-container {
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .breadcrumb-nav {
+    font-size: 0.88rem;
+    color: #64748b;
+  }
+
+  .breadcrumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb-list a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-list a:hover {
+    color: #ea580c;
+  }
+
+  .separator {
+    color: #cbd5e1;
+  }
+
+  .current {
+    color: #0f172a;
+    font-weight: 600;
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Header */
+  .article-header-section {
+    padding: 2.75rem 0 2.25rem;
+    background: linear-gradient(180deg, #fff7ed 0%, #f8fafc 100%);
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .article-header-container {
+    max-width: 860px;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ea580c;
+    background: #ffffff;
+    border: 1px solid #fed7aa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px rgba(234, 88, 12, 0.08);
+  }
+
+  .article-h1 {
+    font-size: 2.35rem;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #0f172a;
+    margin: 0 0 1.25rem 0;
+  }
+
+  .article-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.75rem;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .meta-dot {
+    color: #cbd5e1;
+  }
+
+  .article-lead-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #ea580c;
+    border-radius: 0 8px 8px 0;
+    padding: 1.1rem 1.35rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .article-lead-box strong {
+    color: #c2410c;
+  }
+
+  .article-lead-box p {
+    margin: 0.35rem 0 0 0;
+  }
+
+  /* Content Layout */
+  .article-content-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .article-main-body {
+    min-width: 0;
+  }
+
+  /* Prose Content Styling */
+  .prose-content {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #334155;
+  }
+
+  .prose-content h2 {
+    font-size: 1.55rem;
+    color: #0f172a;
+    margin: 2.5rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .prose-content h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin: 1.75rem 0 0.75rem 0;
+  }
+
+  .prose-content p {
+    margin: 0 0 1.35rem 0;
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    margin: 0 0 1.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .prose-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-content strong {
+    color: #0f172a;
+  }
+
+  .prose-content code {
+    background: #f1f5f9;
+    color: #ea580c;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: monospace;
+  }
+
+  /* Related Articles Box */
+  .related-articles-box {
+    margin: 3.5rem 0 2rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .related-heading {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 1rem 0;
+  }
+
+  .related-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .related-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.98rem;
+    transition: color 0.2s ease, transform 0.15s ease;
+  }
+
+  .related-link:hover {
+    color: #ea580c;
+    transform: translateX(3px);
+  }
+
+  .bullet {
+    color: #ea580c;
+    font-weight: bold;
+  }
+
+  /* CTA Box */
+  .article-cta-box {
+    margin: 2.5rem 0;
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border: 1px solid #fed7aa;
+    border-radius: 14px;
+    padding: 2.25rem 2rem;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-size: 1.35rem;
+    color: #9a3412;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .cta-text {
+    font-size: 0.95rem;
+    color: #7c2d12;
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-cta-primary {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 3px 12px rgba(234, 88, 12, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .btn-cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(234, 88, 12, 0.45);
+  }
+
+  .btn-cta-secondary {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-cta-secondary:hover {
+    background: #f8fafc;
+    border-color: #ea580c;
+    color: #ea580c;
+  }
+
+  .article-nav-bottom {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .btn-back-home:hover {
+    color: #ea580c;
+  }
+
+  /* Sidebar */
+  .article-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .sidebar-widget {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .widget-title {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .widget-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0 0 1rem 0;
+  }
+
+  .widget-pkg-list {
+    list-style: none;
+    margin: 0 0 1.25rem 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .widget-pkg-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .w-pkg-name {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .w-pkg-price {
+    color: #ea580c;
+    font-weight: 700;
+  }
+
+  .btn-widget-cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.65rem;
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-widget-cta:hover {
+    opacity: 0.95;
+  }
+
+  .help-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0 0 0.85rem 0;
+  }
+
+  .widget-text-link {
+    font-size: 0.88rem;
+    color: #ea580c;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .widget-text-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 960px) {
+    .article-content-layout {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .article-h1 {
+      font-size: 1.75rem;
+    }
+    .prose-content {
+      font-size: 1rem;
+    }
+    .cta-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .btn-cta-primary,
+    .btn-cta-secondary {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

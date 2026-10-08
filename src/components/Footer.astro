@@ -1,0 +1,255 @@
+---
+import { siteConfig } from '../data/siteConfig';
+---
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="40" height="40" rx="8" fill="url(#footer-logo-grad)" />
+            <path d="M10 20L28 12L22 28L19 22L10 20Z" fill="#FFFFFF" />
+            <path d="M19 22L28 12" stroke="#FFD8A8" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="28" cy="12" r="2.5" fill="#FFA94D" />
+            <defs>
+              <linearGradient id="footer-logo-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FF6B35" />
+                <stop offset="1" stop-color="#E8590C" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="footer-brand-title">肯の基机场</span>
+        </a>
+        <p class="footer-tagline">
+          肯の基机场介绍与注册指南。致力于提供客观的套餐梳理、新手上手教程与客户端网络排查建议。
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-column">
+          <h3 class="footer-heading">网站导航</h3>
+          <ul class="footer-nav">
+            <li><a href="/">网站首页</a></li>
+            <li><a href="/#pricing">全部套餐价格</a></li>
+            <li><a href="/#guide">新手使用指南</a></li>
+            <li><a href="/#articles">知识文章精选</a></li>
+            <li><a href="/#faq">常见问题答疑</a></li>
+          </ul>
+        </div>
+
+
+
+        <div class="footer-column">
+          <h3 class="footer-heading">快速通道</h3>
+          <ul class="footer-nav">
+            <li>
+              <a
+                href={siteConfig.affiliateUrl}
+                target="_blank"
+                rel={siteConfig.affiliateRel}
+                class="cta-link"
+              >
+                前往服务商注册
+              </a>
+            </li>
+            <li><a href="/#feedback">使用前核对清单</a></li>
+            <li><a href="/articles/cheap-airport/">便宜机场挑选方法</a></li>
+            <li><a href="/articles/clash-nodes/">Clash节点导入指南</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="copyright-text">
+        © 2026 肯の基机场介绍与注册指南 (kendeji.rest) · 保留所有权利
+      </p>
+      <div class="footer-meta-links">
+        <a href="/sitemap.xml" target="_blank">网站地图 (Sitemap)</a>
+        <a href="/robots.txt" target="_blank">Robots.txt</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #060a14;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    padding: 3.5rem 1.25rem 2rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.3fr 2fr;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: #ffffff;
+  }
+
+  .footer-brand-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .footer-tagline {
+    color: #94a3b8;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0;
+  }
+
+  .footer-links-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-heading {
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .footer-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-nav a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .footer-nav a:hover,
+  .footer-nav a:focus-visible {
+    color: #ff922b;
+  }
+
+  .cta-link {
+    color: #fb923c !important;
+    font-weight: 500;
+  }
+
+  .resource-link {
+    color: #cbd5e1 !important;
+  }
+
+  .footer-disclosure {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .disclosure-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fb923c;
+    background: rgba(249, 115, 22, 0.12);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .disclosure-text {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.82rem;
+  }
+
+  .copyright-text {
+    margin: 0;
+    color: #64748b;
+  }
+
+  .footer-meta-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .footer-meta-links a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-meta-links a:hover {
+    color: #cbd5e1;
+  }
+
+  @media (max-width: 900px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .footer-links-group {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

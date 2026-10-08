@@ -1,0 +1,788 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PackageCard from '../components/PackageCard.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { siteConfig } from '../data/siteConfig';
+import { packages } from '../data/packages';
+import { articles } from '../data/articles';
+import { faqs } from '../data/faqs';
+import { checklistItems } from '../data/checklist';
+import { verifiedServices, clientPlatforms } from '../data/servicesAndClients';
+
+const pageTitle = `${siteConfig.name} - 肯の基机场介绍与注册指南 | 套餐价格与客户端配置`;
+const pageDescription = siteConfig.description;
+
+// Guides 4 steps
+const guideSteps = [
+  {
+    step: '01',
+    title: '按需选购套餐',
+    desc: '根据每月实际出海流量选择合适的月付规格，从经典OK单人餐（100GB）到全家桶（500GB），自主掌控开销。'
+  },
+  {
+    step: '02',
+    title: '快速注册账户',
+    desc: '前往服务商后台输入电子邮箱并设定独立强密码，完成账户创建并开通服务。'
+  },
+  {
+    step: '03',
+    title: '获取专属订阅',
+    desc: '在用户中心控制面板复制专属于您账户的节点订阅 URL 或点击一键导入生成配置。'
+  },
+  {
+    step: '04',
+    title: '导入客户端开启',
+    desc: '将订阅导入 Windows、Android 或 iOS 兼容客户端，同步节点后开启分流代理即可顺畅连接。'
+  }
+];
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl="https://kendeji.rest/"
+  ogType="website"
+>
+  <!-- 1. Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    <div class="container hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>肯の基机场客观介绍与注册指南</span>
+      </div>
+
+      <h1 class="hero-title">
+        肯の基机场
+        <span class="title-sub">配置指南与套餐选购手册</span>
+      </h1>
+
+      <p class="hero-desc">
+        为跨境出海、学术研究及全球协作用户提供透明、客观的肯の基机场套餐梳理与操作指引。全系套餐均支持按月付费与定期流量重置，涵盖 Windows、Android、iOS 全平台客户端配置与连接故障排查。
+      </p>
+
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-hero-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          <span>查看套餐价格</span>
+        </a>
+
+        <a
+          href={siteConfig.affiliateUrl}
+          target="_blank"
+          rel={siteConfig.affiliateRel}
+          class="btn-hero-primary"
+        >
+          <span>前往服务商注册</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <div class="hero-quick-meta">
+        <div class="meta-item">
+          <span class="meta-icon">✓</span>
+          <span>全系按月计费</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">✓</span>
+          <span>独立 Token 鉴权</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">✓</span>
+          <span>支持全平台客户端</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-icon">✓</span>
+          <span>工单技术支持</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Guide Section -->
+  <section class="section guide-section" id="guide">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">快速上手</span>
+        <h2 class="section-title">四步完成肯の基机场配置</h2>
+        <p class="section-subtitle">
+          标准化操作路径，新手用户只需简单四步，即可从零完成套餐开通到客户端代理启动。
+        </p>
+      </div>
+
+      <div class="guide-steps-grid">
+        {guideSteps.map((step) => (
+          <div class="guide-step-card">
+            <div class="step-num">{step.step}</div>
+            <h3 class="step-title">{step.title}</h3>
+            <p class="step-desc">{step.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Packages Pricing Section -->
+  <section class="section pricing-section" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">全部套餐</span>
+        <h2 class="section-title">肯の基机场套餐价格表</h2>
+        <p class="section-subtitle">
+          全套 4 档月付套餐清晰呈现，流量按月重置，满足不同出海流量规模需求。
+        </p>
+      </div>
+
+      <!-- Packages Grid: All 5 packages displayed -->
+      <div class="packages-grid">
+        {packages.map((pkg) => (
+          <PackageCard pkg={pkg} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Verified Services Section -->
+  <section class="section services-section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">服务规格</span>
+        <h2 class="section-title">已核实的服务特征与规范</h2>
+        <p class="section-subtitle">
+          坚持客观求真原则，仅列出已核实的基础服务能力，未知特性绝不作为商业卖点夸大宣传。
+        </p>
+      </div>
+
+      <div class="services-grid">
+        {verifiedServices.map((service) => (
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="service-title">{service.title}</h3>
+            <p class="service-desc">{service.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Client Platforms Section -->
+  <section class="section clients-section" id="clients">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">客户端说明</span>
+        <h2 class="section-title">主流系统客户端导入与配置入口</h2>
+        <p class="section-subtitle">
+          覆盖 Windows、Android、iOS 主流设备，基于开源协议生态与现代核心进行适配。
+        </p>
+      </div>
+
+      <div class="clients-grid">
+        {clientPlatforms.map((item) => (
+          <div class="client-card">
+            <div class="client-header">
+              <h3 class="client-platform-title">{item.platform}</h3>
+              <div class="client-apps">
+                <span class="apps-label">推荐客户端：</span>
+                <span class="apps-list">{item.recommendedApps.join('、')}</span>
+              </div>
+            </div>
+
+            <div class="client-notes">
+              <strong>系统适配提示：</strong>
+              <span>{item.compatibilityNotes}</span>
+            </div>
+
+            <div class="client-steps-box">
+              <h4 class="steps-heading">配置步骤指引：</h4>
+              <ol class="client-steps-list">
+                {item.steps.map((st) => (
+                  <li>{st}</li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Knowledge Articles Section -->
+  <section class="section articles-section" id="articles">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">知识文章</span>
+        <h2 class="section-title">科学上网与节点配置精选文章</h2>
+        <p class="section-subtitle">
+          围绕套餐挑选、安全防护、Clash分流与出海网络排查打造的实用深度内容库。
+        </p>
+      </div>
+
+      <div class="articles-list-container">
+        {articles.map((article, index) => (
+          <ArticleCard article={article} index={index} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Pre-purchase Checklist (User Feedback Section) -->
+  <section class="section feedback-section" id="feedback">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">选购须知</span>
+        <h2 class="section-title">使用前建议核对哪些信息</h2>
+        <p class="section-subtitle">
+          本站不发布未经授权的虚构好评，建议每位用户在正式开通服务前认真核对以下要点。
+        </p>
+      </div>
+
+      <div class="checklist-grid">
+        {checklistItems.map((item) => (
+          <div class="checklist-card">
+            <div class="check-icon">✓</div>
+            <div class="check-body">
+              <h3 class="check-title">{item.title}</h3>
+              <p class="check-desc">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQ Section (Default Expanded) -->
+  <section class="section faq-section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">常见问题</span>
+        <h2 class="section-title">肯の基机场常见问题答疑（FAQ）</h2>
+        <p class="section-subtitle">
+          全量默认展开显示，帮助您快速解决注册、订阅导入、连接排查及服务支持疑问。
+        </p>
+      </div>
+
+      <div class="faq-list">
+        {faqs.map((faq) => (
+          <div class="faq-item">
+            <h3 class="faq-question">{faq.q}</h3>
+            <div class="faq-answer">
+              <p>{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Section Styling */
+  .hero-section {
+    position: relative;
+    padding: 5.5rem 0 4.5rem;
+    background: linear-gradient(180deg, #fff7ed 0%, #f8fafc 100%);
+    border-bottom: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+
+  .hero-bg-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(600px, 90vw);
+    max-width: 100%;
+    height: 320px;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.12) 0%, rgba(249, 115, 22, 0) 70%);
+    pointer-events: none;
+    filter: blur(50px);
+  }
+
+  .hero-container {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1px solid #fed7aa;
+    color: #ea580c;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(234, 88, 12, 0.1);
+  }
+
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ea580c;
+    border-radius: 50%;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    color: #0f172a;
+    margin: 0 0 1.25rem;
+  }
+
+  .title-sub {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #ea580c;
+    margin-top: 0.4rem;
+  }
+
+  .hero-desc {
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: #475569;
+    margin: 0 auto 2.25rem;
+    max-width: 720px;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-bottom: 2.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 0.85rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .btn-hero-primary:hover,
+  .btn-hero-primary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45);
+    opacity: 0.96;
+  }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 0.85rem 1.75rem;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .btn-hero-secondary:hover,
+  .btn-hero-secondary:focus-visible {
+    background: #f8fafc;
+    border-color: #ea580c;
+    color: #ea580c;
+  }
+
+  .hero-quick-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    font-size: 0.92rem;
+    color: #475569;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .meta-icon {
+    color: #16a34a;
+    font-weight: bold;
+  }
+
+  /* Guide Steps */
+  .guide-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .guide-step-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.75rem 1.25rem;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .guide-step-card:hover {
+    transform: translateY(-2px);
+    border-color: #f97316;
+  }
+
+  .step-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ea580c;
+    font-family: monospace;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-title {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .step-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Packages Grid */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .pricing-disclaimer-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    padding: 1.1rem 1.35rem;
+    color: #7c2d12;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .pricing-disclaimer-box strong {
+    color: #c2410c;
+  }
+
+  /* Services Grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease;
+  }
+
+  .service-card:hover {
+    border-color: #f97316;
+  }
+
+  .service-icon-box {
+    margin-bottom: 1rem;
+    display: inline-flex;
+    padding: 0.5rem;
+    background: #fff7ed;
+    border-radius: 8px;
+  }
+
+  .service-title {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .service-desc {
+    font-size: 0.92rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Clients Grid */
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .client-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .client-platform-title {
+    font-size: 1.3rem;
+    color: #0f172a;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .client-apps {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .apps-label {
+    color: #64748b;
+  }
+
+  .apps-list {
+    color: #ea580c;
+    font-weight: 600;
+  }
+
+  .client-notes {
+    font-size: 0.88rem;
+    color: #475569;
+    background: #f8fafc;
+    padding: 0.85rem;
+    border-radius: 6px;
+    border-left: 3px solid #ea580c;
+    line-height: 1.55;
+  }
+
+  .client-notes strong {
+    color: #0f172a;
+  }
+
+  .client-steps-box {
+    margin-top: 0.25rem;
+  }
+
+  .steps-heading {
+    font-size: 0.92rem;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+  }
+
+  .client-steps-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.88rem;
+    color: #64748b;
+    line-height: 1.65;
+  }
+
+  .client-steps-list li {
+    margin-bottom: 0.35rem;
+  }
+
+  /* Articles List */
+  .articles-list-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Feedback Checklist */
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .checklist-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.35rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease;
+  }
+
+  .checklist-card:hover {
+    border-color: #f97316;
+  }
+
+  .check-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .check-title {
+    font-size: 1.05rem;
+    color: #0f172a;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .check-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* FAQ List (Default Expanded) */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item:hover {
+    border-color: #f97316;
+  }
+
+  .faq-question {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+  }
+
+  .faq-answer p {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Responsive Breakpoints */
+  @media (max-width: 1024px) {
+    .guide-steps-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .clients-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-title {
+      font-size: 2.6rem;
+    }
+    .title-sub {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 4rem 0 3rem;
+    }
+    .hero-title {
+      font-size: 2.1rem;
+    }
+    .title-sub {
+      font-size: 1.25rem;
+    }
+    .hero-desc {
+      font-size: 1rem;
+    }
+    .guide-steps-grid {
+      grid-template-columns: 1fr;
+    }
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+    .packages-grid {
+      grid-template-columns: 1fr;
+    }
+    .checklist-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .btn-hero-primary,
+    .btn-hero-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+    .articles-list-container {
+      padding: 0.25rem 1rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .hero-title {
+      font-size: 1.85rem;
+    }
+    .title-sub {
+      font-size: 1.1rem;
+    }
+  }
+</style>

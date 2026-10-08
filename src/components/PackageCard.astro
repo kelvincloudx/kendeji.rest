@@ -1,0 +1,203 @@
+---
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  pkg: {
+    id: string;
+    name: string;
+    price: number;
+    currency: string;
+    billingCycle: string;
+    traffic: string;
+    trafficReset: string;
+    description: string;
+  };
+}
+
+const { pkg } = Astro.props;
+---
+
+<div class="package-card" id={`pkg-${pkg.id}`}>
+  <div class="pkg-header">
+    <h3 class="pkg-name">{pkg.name}</h3>
+    <p class="pkg-desc">{pkg.description}</p>
+  </div>
+
+  <div class="pkg-pricing">
+    <span class="pkg-currency">{pkg.currency}</span>
+    <span class="pkg-amount">{pkg.price}</span>
+    <span class="pkg-cycle">/{pkg.billingCycle}</span>
+  </div>
+
+  <div class="pkg-specs">
+    <div class="spec-row">
+      <span class="spec-label">每月流量配额</span>
+      <span class="spec-value highlight">{pkg.traffic}</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">流量重置周期</span>
+      <span class="spec-value">{pkg.trafficReset}</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">计费结算方式</span>
+      <span class="spec-value">{pkg.billingCycle}订阅</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">支持协议客户端</span>
+      <span class="spec-value">全平台通用</span>
+    </div>
+  </div>
+
+  <div class="pkg-action">
+    <a
+      href={siteConfig.affiliateUrl}
+      target="_blank"
+      rel={siteConfig.affiliateRel}
+      class="btn-pkg-action"
+    >
+      前往注册
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<style>
+  .package-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+
+  .package-card:hover {
+    border-color: #f97316;
+    box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+  }
+
+  .pkg-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .pkg-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .pkg-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    min-height: 2.6em;
+  }
+
+  .pkg-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .pkg-currency {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ea580c;
+  }
+
+  .pkg-amount {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+  }
+
+  .pkg-cycle {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-left: 0.2rem;
+  }
+
+  .pkg-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .spec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.88rem;
+  }
+
+  .spec-label {
+    color: #64748b;
+  }
+
+  .spec-value {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .spec-value.highlight {
+    color: #ea580c;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .pkg-action {
+    margin-top: auto;
+  }
+
+  .btn-pkg-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .btn-pkg-action:hover,
+  .btn-pkg-action:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
+    opacity: 0.97;
+  }
+
+  .btn-pkg-action:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .package-card {
+      padding: 1.35rem 1.15rem;
+    }
+    .pkg-amount {
+      font-size: 2.1rem;
+    }
+  }
+</style>
